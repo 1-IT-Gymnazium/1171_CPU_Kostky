@@ -1,4 +1,6 @@
 const dices = rollDices(6);
+let turnScore = 0;
+let score = 0;
 
 function rollDices(length)
 {
@@ -16,49 +18,47 @@ function getRnd(min, max) {
 
 function logPoints(selected)
 {
-  let turnScore = 0;
+  let result = 0;
   selected.sort(function(a, b){return a - b});
-  console.log(Math.min(...selected) +"," +  Math.max(...selected));
-  if(Math.min(...selected) == Math.max(...selected) && selected[0] == 1)//jedničky
+  if((Math.min(...selected) == Math.max(...selected) && selected[0] == 1) && selected.length > 2)//jedničky
   {
-    turnScore += selected.length * selected[0] * 1000;
+    result += selected.length * selected[0] * 1000;
   }
-  else if(Math.min(...selected) == Math.max(...selected)) //x* cislo
+  else if((Math.min(...selected) == Math.max(...selected))&& selected. length > 2) //x* cislo
   {
     let multi = (selected.length == 3 || selected.length == 4) ? 2 : (selected.length == 5) ? 1 : -2;
-    turnScore += (selected.length - multi) * selected[0] * 100;
+    result += (selected.length - multi) * selected[0] * 100;
     console.log("x*cislo")
   }
   else if((Math.min(...selected) == 1 && Math.max(...selected) == 6) && selected.length == 6) //postupka
   {
-    turnScore += 1500; 
+    result += 1500; 
     console.log("postupka")
   }
   else
   {
     let pairs = [0, 0, 0, 0, 0, 0];
-    //let pairs = new Array(6);
     for(let i = 0; i < selected.length; i++) // páry
     {
       pairs[selected[i] -1]++;
     }
-    console.log(Math.min(...pairs) +"," +  Math.max(...pairs));
-    console.log(pairs);
     if((Math.max(...pairs) == 2) && selected.length == 6)
     {
-      turnScore += 1000;
+      result += 1000;
       console.log("pary");
     }
     else
     {
-      for(let i = 0; i < selected; i++) // 1/5
+      for(let i = 0; i < selected.length; i++) // 1/5
       {
-        turnScore += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
-        console.log("1/5")
+        result += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
+        console.log(selected[i])
       }
     }
   }
-  return turnScore;
+  return result;
 }
 
-console.log(logPoints([3,3,3,3,3,3]));
+
+
+console.log(logPoints([1,1,5]));
