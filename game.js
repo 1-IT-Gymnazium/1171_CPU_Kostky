@@ -1,4 +1,4 @@
-const dices = rollDices(6);
+let dices = rollDices(6);
 let turnScore = 0;
 let score = 0;
 
@@ -16,7 +16,7 @@ function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
 
-function logPoints(selected)
+function logPoints(selected) //vraci pocet pointu
 {
   let result = 0;
   selected.sort(function(a, b){return a - b});
@@ -52,13 +52,33 @@ function logPoints(selected)
       for(let i = 0; i < selected.length; i++) // 1/5
       {
         result += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
-        console.log(selected[i])
       }
     }
   }
   return result;
 }
 
+function hasPoints() //kontroluje jestli hracovi padla neaka hodnota
+{
+  if(logPoints(dices) == 0)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
 
+function remFromDices(toRemove) // removuje z dices
+{
+  for(let i = 0; i < toRemove.length; i++)
+  {
+    let index = dices.indexOf(toRemove[i]);
+    dices.splice(index, index);
+  }
+}
 
-console.log(logPoints([1,1,5]));
+console.log(dices);
+remFromDices([dices[1], dices[2], dices[3]]);
+console.log(dices);
