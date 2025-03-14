@@ -5,10 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kostky</title>
     <link rel="stylesheet" href="styles.css">
+
+        <!-- FONTY-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="menu"></div>
+    <div class="menuContainer">
+        <h1>Kostky</h1>
+        <div id="menu">
+            <div class="button" id="startButton">Start</div>
+            <div class="button" id="settingsButton">Settings</div>
+            <div class="button" id="rulesButton">Rules</div>
+        </div>
+        <div id="start">
+            <div class="button" id="oneVOneButton">1v1</div>
+            <div class="button" id="oneVAiButton">1vAi</div>
+            <div class="button" onclick="menuUpdate('menu')">Back</div>
+        </div>
+        <div id="difficulty">
+            <div class="text">Choose Ai difficulty</div>
+            <div class="button" id="easyButton">Easy</div>
+            <div class="button" id="mediumButton">Medium</div>
+            <div class="button" id="hardButton">Hard</div>
+            <div class="button" onclick="menuUpdate('menu')">Back</div>
+        </div>
+        <div id="settings">
+            <div class="text">Sound Effect Volume</div>
+            <div class="sliderContainer">
+                <div class="text" id="volumeSliderValue">50</div>
+                <input class="slider" type="range" id="volumeSlider" value="50">
+            </div>
+            
+            <div class="text">Music Volume</div>
+            <div class="sliderContainer">
+                <div class="text" id="musicSliderValue">50</div>
+                <input class="slider" type="range" id="musicSlider" value="50">
+            </div>
+                        
+            <div class="button" onclick="menuUpdate('menu')">Back</div>
+        </div>
+        <div id="rules">
+            <div class="text">Rules</div>
+            <div class="text"><a href="https://www.kramekprodeti.cz/fotky45931/fotov/_ps_42351Pravidla-her-v-kostky.pdf">pravidla.pdf</a></div>
+            <div class="button" onclick="menuUpdate('menu')">Back</div>
+        </div>
+    </div>
+    <div id="game"></div>
+    <!-- Ensure the script is imported as a module -->
     <script src="menu_script.js"></script>
-    <script src="script.js"></script>
-</body>
+    <script src="game.js"></script>
+    <script src="script.js"></script></body>
 </html>

@@ -1,9 +1,13 @@
 :root{
-    --color1: #f5f5f5;
+    --color1: #b0b0b0;
+    --color2: #797979;
+    --textColor: #000;
 }
 *{
     padding: 0;
     margin: 0;
+    font-family: "Lexend Giga", serif;
+    color: var(--textColor);
 }
 body{
     font-family: Arial, sans-serif;
@@ -12,46 +16,89 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    background: linear-gradient(135deg, #4b4b4b, #2a2a2a);
 }
-#menu{
-    background-color: var(--color1);
+.button{
+    width: 60%;
+    height: 8%;
+    cursor: pointer;
+    margin: 2% 0;
+    padding: 5%;
+    background-color: var(--color2);
+    border-radius: 40px;
+
+    /* Text alignment */
+    text-align: center;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
-    gap: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    animation: lowTaperfadeIn 0.5s ease-in-out;
+    transition: transform 0.4s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+.button:hover{
+    transform: translateY(-7px);
+    box-shadow: 0 7px 0 rgba(0, 0, 0, 0.75); /* x-offset, y-offset, blur, color */
+}
+#menu, #start, #difficulty, #settings, #rules{
+    margin-top: 5%;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#menu, #start, #difficulty, #settings, #rules{
+    flex-direction: column;
 }
 
-#menu button {
-    background: linear-gradient(135deg, #007BFF, #0056b3);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.text{
+    margin: 5%;
+    font-size: large;
+}
+.menuContainer{
+    width: 400px;
+    height: auto;
+    background-color: var(--color1);
+    padding: 5%;
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+.sliderContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider {
+    margin: 2%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 8px;
+    background: #000000;
     border-radius: 5px;
-    transition: background-color 0.3s, transform 0.2s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: background 0.3s ease;
 }
 
-#menu button:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
-    transform: translateY(-2px);
+/* Styles when hovering over the slider */
+.slider:hover {
+    background: #bbb;
 }
-/* MASSIVE Animation */
-@keyframes lowTaperfadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+
+/* Custom Thumb Style */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff0000;
+    cursor: pointer;
 }

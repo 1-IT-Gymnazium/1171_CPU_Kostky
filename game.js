@@ -2,6 +2,15 @@ let dices = rollDices(6);
 let turnScore = 0;
 let score = 0;
 
+function startGame(setting){
+  /*
+  inputy:
+    0 - hrac proti hraci
+    1 - hrac proti ai (easy)
+    2 - hrac proti ai (medium)
+    3 - hrac proti ai (hard)
+  */
+}
 function rollDices(length)
 {
   let result = [];

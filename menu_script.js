@@ -1,117 +1,90 @@
-const menu = document.getElementById('menu');
-const buttons = [
-    "start",
-    "settings",
-    "rules",
-];
-const start = [
-    "1vs1",
-    "1vsAI",
-    "back"
-];
-const aiDificulty = [
-    "easy",
-    "medium",
-    "hard",
-    "back"
-];
-const settings = [
-    "sound",    
-    "back"
-];
-const rules = [
-    "back"
-];
+// menu_script.js
 
-function updateMenu(){
-    menu.innerHTML = "";
-    for (let i = 0; i < buttons.length; i++) {
-        const button = document.createElement('button');
-        button.innerHTML = buttons[i];
-        button.onclick = function(){
-            switch(buttons[i]){
-                case "start":
-                    updateStart();
-                    break;
-                case "settings":
-                    updateSettings();
-                    break;
-                case "rules":
-                    updateRules();
-                    break;
-            }
-        }
-        menu.appendChild(button);
-    }
-}
-updateMenu();
+// Define the menus object (with correct syntax)
+const menus = {
+    'menu': document.getElementById('menu'),
+    'start': document.getElementById('start'),
+    'settings': document.getElementById('settings'),
+    'rules': document.getElementById('rules'),
+    'difficulty': document.getElementById('difficulty')
+};
 
-function updateStart() {
-    menu.innerHTML = "";
-    for (let i = 0; i < start.length; i++) {
-        const button = document.createElement('button');
-        button.innerHTML = start[i];
-        button.onclick = function(){
-            if (start[i] === "back") {
-                updateMenu();
-            } else if (start[i] === "1vsAI") {
-                updateAIDifficulty();
-            } else {
-                // Handle other start options (1vs1)
-                console.log(start[i]);
-            }
-        }
-        menu.appendChild(button);
+// buttons
+const startButton = document.getElementById('startButton');
+const settingsButton = document.getElementById('settingsButton');
+const rulesButton = document.getElementById('rulesButton');
+// start buttons
+const oneVOneButton = document.getElementById('oneVOneButton');
+const oneVAiButton = document.getElementById('oneVAiButton');
+
+// difficulty buttons
+const easyButton = document.getElementById('easyButton');
+const mediumButton = document.getElementById('mediumButton');
+const hardButton = document.getElementById('hardButton');
+
+const volumeSlider = document.getElementById('volumeSlider');
+const musicSlider = document.getElementById('musicSlider');
+
+const volumeSliderValue = document.getElementById('volumeSliderValue');
+const musicSliderValue = document.getElementById('musicSliderValue');
+
+// Update the volume value when the slider is changed
+volumeSlider.addEventListener('input', () => {
+    volumeSliderValue.textContent = volumeSlider.value;
+});
+
+// Update the music volume value when the slider is changed
+musicSlider.addEventListener('input', () => {
+    musicSliderValue.textContent = musicSlider.value;
+});
+
+
+
+// Function to update the menu based on menuState
+function menuUpdate(menuState) {
+    // Hide all menus first
+    for (let i in menus) {
+        menus[i].style.display = 'none';
     }
+    // Show the selected menu
+    menus[menuState].style.display = 'flex';
 }
 
-function updateAIDifficulty() {
-    menu.innerHTML = "";
-    for (let i = 0; i < aiDificulty.length; i++) {
-        const button = document.createElement('button');
-        button.innerHTML = aiDificulty[i];
-        button.onclick = function(){
-            if (aiDificulty[i] === "back") {
-                updateStart();
-            } else {
-                // Handle AI difficulty options (easy, medium, hard)
-                console.log(aiDificulty[i]);
-            }
-        }
-        menu.appendChild(button);
-    }
-}
+// Event Listeners
+startButton.addEventListener("click", () => {
+    menuUpdate('start');
+});
 
-function updateSettings() {
-    menu.innerHTML = "";
-    for (let i = 0; i < settings.length; i++) {
-        const button = document.createElement('button');
-        button.innerHTML = settings[i];
-        button.onclick = function(){
-            if (settings[i] === "back") {
-                updateMenu();
-            } else {
-                // Handle settings options (sound)
-                console.log(settings[i]);
-            }
-        }
-        menu.appendChild(button);
-    }
-}
+settingsButton.addEventListener("click", () => {
+    menuUpdate('settings');
+});
 
-function updateRules() {
-    menu.innerHTML = "";
-    for (let i = 0; i < rules.length; i++) {
-        const button = document.createElement('button');
-        button.innerHTML = rules[i];
-        button.onclick = function(){
-            if (rules[i] === "back") {
-                updateMenu();
-            } else {
-                // Handle rules options
-                console.log(rules[i]);
-            }
-        }
-        menu.appendChild(button);
-    }
+rulesButton.addEventListener("click", () => {
+    menuUpdate('rules');
+});
+
+oneVOneButton.addEventListener("click", () => {
+    startGame(0);
+});
+
+oneVAiButton.addEventListener("click", () => {
+    menuUpdate('difficulty');
+});
+
+easyButton.addEventListener("click", () => {
+    startGame(1);
+    // start game with ai on easy difficulty
+});
+mediumButton.addEventListener("click", () => {
+    startGame(2);
+    // start game with ai on medium difficulty
+});
+hardButton.addEventListener("click", () => {
+    startGame(3);
+    // start game with ai on hard difficulty
+});
+
+// This function will be used in your script.js
+function startMenu() {
+    menuUpdate('menu'); // Start with the main menu visible
 }
