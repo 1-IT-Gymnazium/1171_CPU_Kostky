@@ -31,6 +31,8 @@ const musicSliderValue = document.getElementById('musicSliderValue');
 // Update the volume value when the slider is changed
 volumeSlider.addEventListener('input', () => {
     volumeSliderValue.textContent = volumeSlider.value;
+    console.log(volumeSlider.value);
+    changeVolume(volumeSlider.value);
 });
 
 // Update the music volume value when the slider is changed

@@ -11,6 +11,21 @@ const diceImages = [
   'Files/Dices/five.png',
   'Files/Dices/six.png'
 ];
+const clickSoundEffects = [
+  new Audio('Files/Sound/Click1.wav'),
+  new Audio('Files/Sound/Click2.wav'),
+  new Audio('Files/Sound/Click3.wav'),
+  new Audio('Files/Sound/Click4.wav'),
+  new Audio('Files/Sound/Click5.wav'),
+  new Audio('Files/Sound/Click6.wav'),
+  new Audio('Files/Sound/Click7.wav')
+]
+
+function changeVolume(volume){
+  clickSoundEffects.forEach(element => {
+    clickSoundEffects[element].volume = volume;
+  });
+}
 
 let turn = 0; // 0 Hrac 1, 1 Hrac 2
 let playerOne = {
@@ -82,12 +97,14 @@ function generateDices(numbers) {
 
       dice.addEventListener('click', function() {
         dice.style.border = (dice.style.border === '3px solid red') ? dice.style.border = '3px solid black' : dice.style.border = '3px solid red';
+        const soundIndex = Math.floor(Math.random() * clickSoundEffects.length);
+        clickSoundEffects[soundIndex].play();              
       });
   }
 }
 roll();
 function roll(){
-  generateDices(rollDices(6));
+  generateDices(rollDices(6))
 }
 
 function updateSelected(){
