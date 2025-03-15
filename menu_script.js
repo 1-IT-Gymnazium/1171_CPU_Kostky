@@ -49,6 +49,9 @@ function menuUpdate(menuState) {
     // Show the selected menu
     menus[menuState].style.display = 'flex';
 }
+function hideMenuContainer(){
+    document.getElementById('menuContainer').style.display = 'none';
+}
 
 // Event Listeners
 startButton.addEventListener("click", () => {
@@ -64,6 +67,7 @@ rulesButton.addEventListener("click", () => {
 });
 
 oneVOneButton.addEventListener("click", () => {
+    debugStart();
     startGame(0);
 });
 
