@@ -69,7 +69,6 @@ rulesButton.addEventListener("click", () => {
 });
 
 oneVOneButton.addEventListener("click", () => {
-    debugStart();
     startGame(0);
 });
 

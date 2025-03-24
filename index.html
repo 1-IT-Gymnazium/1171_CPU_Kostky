@@ -54,20 +54,14 @@
     </div>
     <div id="game">
         <div class="innerGameContainer">
-            <div class="playerOne">
-                <div class="text">Player One</div>
-                <div id="scoreA"></div>
-                <div class="selectedA"></div>
-                <div class="turnScoreA"></div>
-            </div>
-    
             <div class="dicesTable" id="dicesTable"></div>
-    
-            <div class="playerTwo">
-                <div class="text">Player Two</div>
-                <div id="scoreB"></div>
-                <div class="selectedB"></div>
-                <div class="turnScoreB"></div>
+            <div class="infoBox">
+                <div class="text">Hráč: <span id="playerName">1</span></div>
+                <div class="text">Skóre: <span id="playerScore">0</span></div>
+                <div class="text">Počet hodů: <span id="playerRolls">0</span></div>
+                <div class="text">Aktuální hod: <span id="playerRoll">0</span></div>
+                <div class="button" id="rollButton">Hodit</div>
+                <div class="button" id="endTurnButton">Konec tahu</div>
             </div>  
         </div>
     </div>

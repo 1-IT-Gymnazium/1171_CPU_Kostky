@@ -1,5 +1,4 @@
-
-let dices = rollDices(6);
+let dices = [];
 let turnScore = 0;
 let score = 0;
 
@@ -26,25 +25,34 @@ function changeVolume(volume){
     clickSoundEffects[element].volume = volume;
   });
 }
+let dicesTurnCount = 6;
+const rollButton = document.getElementById('rollButton');
+rollButton.addEventListener('click', function() {
+  dicesTurnCount -= getSelectedDices().length;
+  updateScore();
+  roll(dicesTurnCount);
+  
+});
 
-let turn = 0; // 0 Hrac 1, 1 Hrac 2
-let playerOne = {
-  score: 0
-};
-let playerTwo = {
-  score: 0
-};
+let players = [
+  {
+    name: '1',
+    score: 0,
+    isPlaying: true
+  },
+  {
+    name: '2',
+    score: 0,
+    isPlaying: false
+  }
+]
 
-playerOne.score = 50;
-playerTwo.score = 60;
-
-console.log(playerOne.score + " " + playerTwo.score);
-
-function debugStart(){
-  console.log('debug start');
-  hideMenuContainer();
-  console.log('menu hidden');
-  document.getElementById('game').style.display = 'flex';
+function updateScore(){
+  let onTurn = players.find(player => player.isPlaying);
+  console.log(onTurn);
+  players[onTurn].score += turnScore;
+  turnScore = 0;
+  document.getElementById('playerScore') = players[onTurn].score;
 }
 
 function startGame(setting){
@@ -55,11 +63,15 @@ function startGame(setting){
   2 - hrac proti ai (medium)
   3 - hrac proti ai (hard)
   */
+  hideMenuContainer();
+  console.log('menu hidden');
+  document.getElementById('game').style.display = 'flex';
+ dices = roll(6);
 }
 
-function updateScore(){
-  document.getElementById('scoreA').innerHTML = '<div class="text">' + playerOne.score + '</div>';
-  document.getElementById('scoreB').innerHTML = '<div class="text">' + playerTwo.score + '</div>';
+function setScore() 
+{
+  
 }
 
 function generateDices(numbers) {
@@ -80,6 +92,7 @@ function generateDices(numbers) {
       const dice = document.createElement("img");
       dice.className = "dice"; 
       dice.src = diceImages[numbers[i] - 1]; // Adjusted index for 0-based array
+      dice.index = numbers[i];// asdfjasdfj
       dice.setAttribute("draggable", "false");
 
       const { row, col } = positions[i];
@@ -102,13 +115,21 @@ function generateDices(numbers) {
       });
   }
 }
-roll();
-function roll(){
-  generateDices(rollDices(6))
+
+function getSelectedDices(){
+  let dices = document.getElementsByClassName('dice');
+  let selected = [];
+  for(let i = 0; i < dices.length; i++){
+    if(dices[i].style.border === '3px solid red'){
+      selected.push(dices[i].index);
+    }
+  }
+  return selected;
 }
 
-function updateSelected(){
-
+//roll(6);
+function roll(count){// 6 deflaut
+  generateDices(rollDices(count))
 }
 
 function rollDices(length)
@@ -124,7 +145,7 @@ function rollDices(length)
 function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
-/*
+
 function logPoints(selected) //vraci pocet pointu
 {
   let result = 0;
@@ -164,7 +185,7 @@ function logPoints(selected) //vraci pocet pointu
       }
     }
   }
-  return result;
+  turnScore = result;
 }
 
 function hasPoints() //kontroluje jestli hracovi padla neaka hodnota
@@ -178,17 +199,3 @@ function hasPoints() //kontroluje jestli hracovi padla neaka hodnota
     return true;
   }
 }
-
-function remFromDices(toRemove) // removuje z dices
-{
-  for(let i = 0; i < toRemove.length; i++)
-  {
-    let index = dices.indexOf(toRemove[i]);
-    dices.splice(index, index);
-  }
-}
-
-console.log(dices);
-remFromDices([dices[1], dices[2], dices[3]]);
-console.log(dices);
-*/
