@@ -146,9 +146,28 @@ function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
 
+  function isAllPairs(arr) {
+      if (arr.length !== 6) return false; // Ensure the array has exactly 6 elements
+  
+      const countMap = arr.reduce((acc, num) => {
+          acc[num] = (acc[num] || 0) + 1;
+          return acc;
+      }, {});
+  
+      return Object.values(countMap).every(count => count === 2);
+}
+
+function areArraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false; // Check length first
+
+  // Sort both arrays and compare them
+  return arr1.sort().toString() === arr2.sort().toString();
+}
+
 function logPoints(selected) //vraci pocet pointu
 {
   let result = 0;
+  let seq = [1,2,3,4,5,6];
   selected.sort(function(a, b){return a - b});
   if((Math.min(...selected) == Math.max(...selected) && selected[0] == 1) && selected.length > 2)//jedničky
   {
@@ -160,22 +179,17 @@ function logPoints(selected) //vraci pocet pointu
     result += (selected.length - multi) * selected[0] * 100;
     console.log("x*cislo")
   }
-  else if((Math.min(...selected) == 1 && Math.max(...selected) == 6) && selected.length == 6) //postupka
+  else if(areArraysEqual(selected,seq)) //postupka
   {
     result += 1500; 
     console.log("postupka")
   }
   else
   {
-    let pairs = [0, 0, 0, 0, 0, 0];
-    for(let i = 0; i < selected.length; i++) // páry
-    {
-      pairs[selected[i] -1]++;
-    }
-    if((Math.max(...pairs) == 2) && selected.length == 6)
+    if(isAllPairs(selected) == true)
     {
       result += 1000;
-      console.log("pary");
+      console.log("mary");
     }
     else
     {
@@ -185,7 +199,7 @@ function logPoints(selected) //vraci pocet pointu
       }
     }
   }
-  turnScore = result;
+  return result;
 }
 
 function hasPoints() //kontroluje jestli hracovi padla neaka hodnota
@@ -198,4 +212,33 @@ function hasPoints() //kontroluje jestli hracovi padla neaka hodnota
   {
     return true;
   }
+}
+
+function easyBot(playersDices){
+  let maxScore = 0;
+  for(let i = 1; i <= playersDices.length; i++)
+  {
+    for(let j = 0; j < (playersDices.length - i) +1; j++)
+    {
+      let currentScore = logPoints(checkForMax(playersDices, i, j));
+      maxScore = (maxScore < currentScore) ? currentScore : maxScore;
+    }
+  }
+  return maxScore;
+}
+
+function checkForMax(arr,length, index){
+  let result  = new Array(length);
+  for(let i = 0; i < length; i++)
+  {
+    if(i + index < arr.length)
+    {
+      result[i] = arr[i + index];
+    }
+    else
+    {
+      result[i] = arr[(i + index) - arr.length];
+    }
+  }
+  return result;
 }
