@@ -2,6 +2,8 @@ let dices = [];
 let turnScore = 0;
 let score = 0;
 
+const dicesTable = document.getElementsByClassName('dicesTable');
+
 const diceImages = [
   'Files/Dices/one.png',
   'Files/Dices/two.png',
@@ -28,31 +30,67 @@ function changeVolume(volume){
 let dicesTurnCount = 6;
 const rollButton = document.getElementById('rollButton');
 rollButton.addEventListener('click', function() {
-  dicesTurnCount -= getSelectedDices().length;
-  updateScore();
-  roll(dicesTurnCount);
-  
+  rollButtonFunction();
 });
+const endTurnButton = document.getElementById('endTurnButton');
+endTurnButton.addEventListener('click', function() {
+  endTurnButtonFunction();
+});
+
+function rollButtonFunction(){
+  turnScore += logPoints(getSelectedDices());
+  dicesTurnCount -= getSelectedDices().length;
+  roll(dicesTurnCount);
+}
+function endTurnButtonFunction(){
+  turnScore += logPoints(getSelectedDices());
+  saveScore();
+  if(players[0].isPlaying){
+    players[0].isPlaying = false;
+    players[1].isPlaying = true;
+  }
+  else{
+    players[0].isPlaying = true;
+    players[1].isPlaying = false;
+  }
+  console.log(players[0].score);
+  console.log(players[1].score);
+  startNewTurn();
+}
+function saveScore(){
+  let onTurn = players.find(player => player.isPlaying).name - 1;
+  players[onTurn].score += turnScore;
+  turnScore = 0;
+}
+function startNewTurn(){
+  //let onTurn = players.find(player => player.isPlaying).name - 1;
+  //dicesTable.style.backgroundColor = players[onTurn].color;
+  dicesTurnCount = 6;
+  turnScore = 0;
+  roll(dicesTurnCount);
+}
 
 let players = [
   {
-    name: '1',
+    name: 1,
     score: 0,
-    isPlaying: true
+    isPlaying: true,
+    color: '#ff0000'
   },
   {
-    name: '2',
+    name: 2,
     score: 0,
-    isPlaying: false
+    isPlaying: false,
+    color: '#0000ff'
   }
 ]
 
 function updateScore(){
-  let onTurn = players.find(player => player.isPlaying);
+  let onTurn = players.find(player => player.isPlaying).name;
   console.log(onTurn);
   players[onTurn].score += turnScore;
   turnScore = 0;
-  document.getElementById('playerScore') = players[onTurn].score;
+  document.getElementById('playerScore').innerText = players[onTurn].score;
 }
 
 function startGame(setting){
@@ -164,11 +202,28 @@ function areArraysEqual(arr1, arr2) {
   return arr1.sort().toString() === arr2.sort().toString();
 }
 
-function logPoints(selected) //vraci pocet pointu
+function logPoints(selected){
+  let result = 0;
+  selected.sort(function(a, b){return a - b});
+  console.log(selected);
+  for(let i = selected.length -1; i >= 0; i--){
+    for(let j = 0; j < selected.length; j++){
+      result += getPoints(checkForMax(selected, i,j));
+      console.log(checkForMax(selected, i,j));
+      if(getPoints(checkForMax(selected, i,j)) > 0){
+        selected = subtractArrays(selected, checkForMax(selected, i,j));
+      }
+    }
+  }
+  return result;
+}
+function subtractArrays(arr1, arr2) {
+  return arr1.filter(item => !arr2.includes(item));
+}
+function getPoints(selected) //vraci pocet pointu
 {
   let result = 0;
   let seq = [1,2,3,4,5,6];
-  selected.sort(function(a, b){return a - b});
   if((Math.min(...selected) == Math.max(...selected) && selected[0] == 1) && selected.length > 2)//jedničky
   {
     result += selected.length * selected[0] * 1000;
@@ -191,12 +246,12 @@ function logPoints(selected) //vraci pocet pointu
       result += 1000;
       console.log("mary");
     }
-    else
+    else if(selected.length < 3)
     {
-      for(let i = 0; i < selected.length; i++) // 1/5
-      {
+      for(let i = 0; i < selected.length; i++){
         result += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
       }
+      
     }
   }
   return result;
