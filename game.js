@@ -205,8 +205,7 @@ function areArraysEqual(arr1, arr2) {
 function logPoints(selected){
   let result = 0;
   selected.sort(function(a, b){return a - b});
-  console.log(selected);
-  for(let i = selected.length -1; i >= 0; i--){
+  for(let i = selected.length; i > 0; i--){
     for(let j = 0; j < selected.length; j++){
       result += getPoints(checkForMax(selected, i,j));
       console.log(checkForMax(selected, i,j));
