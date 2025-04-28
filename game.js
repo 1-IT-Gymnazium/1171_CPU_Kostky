@@ -53,8 +53,8 @@ function endTurnButtonFunction(){
     players[0].isPlaying = true;
     players[1].isPlaying = false;
   }
-  console.log(players[0].score);
-  console.log(players[1].score);
+  console.log("player 1 score is " + players[0].score);
+  console.log("player 2 score is " + players[1].score);
   startNewTurn();
 }
 function saveScore(){
@@ -205,13 +205,20 @@ function areArraysEqual(arr1, arr2) {
 function logPoints(selected){
   let result = 0;
   selected.sort(function(a, b){return a - b});
+  outerLoop:
   for(let i = selected.length; i > 0; i--){
     for(let j = 0; j < selected.length; j++){
+      if(selected.length == 1){
+        result += getPoints(selected);
+        break outerLoop;
+      }
+      else{
       result += getPoints(checkForMax(selected, i,j));
       console.log(checkForMax(selected, i,j));
       if(getPoints(checkForMax(selected, i,j)) > 0){
         selected = subtractArrays(selected, checkForMax(selected, i,j));
       }
+    }
     }
   }
   return result;
@@ -219,40 +226,59 @@ function logPoints(selected){
 function subtractArrays(arr1, arr2) {
   return arr1.filter(item => !arr2.includes(item));
 }
+let isXtimesNum = false;
 function getPoints(selected) //vraci pocet pointu
 {
   let result = 0;
   let seq = [1,2,3,4,5,6];
-  if((Math.min(...selected) == Math.max(...selected) && selected[0] == 1) && selected.length > 2)//jedničky
-  {
-    result += selected.length * selected[0] * 1000;
-  }
-  else if((Math.min(...selected) == Math.max(...selected))&& selected. length > 2) //x* cislo
-  {
-    let multi = (selected.length == 3 || selected.length == 4) ? 2 : (selected.length == 5) ? 1 : -2;
-    result += (selected.length - multi) * selected[0] * 100;
-    console.log("x*cislo")
-  }
-  else if(areArraysEqual(selected,seq)) //postupka
+  let nums = [0,0,0,0,0,0];
+
+  for(let i = 0; i < selected.length; i++) // checks for three nums
+    { 
+      for(let j = 0; j < 6; j++)
+      {
+        if(selected[i] == j+1)
+          {
+            nums[j]++;
+          }
+      }
+    }
+    if(nums.find((element) => element > 2) != undefined){
+      isXtimesNum = true;
+    }
+    console.log(selected);
+  if(areArraysEqual(selected,seq)) //postupka
   {
     result += 1500; 
     console.log("postupka")
   }
-  else
-  {
-    if(isAllPairs(selected) == true)
+  else if(isAllPairs(selected) == true)
     {
       result += 1000;
       console.log("mary");
     }
-    else if(selected.length < 3)
-    {
-      for(let i = 0; i < selected.length; i++){
-        result += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
+  else if(selected.length < 4 && !isXtimesNum)
+      {
+        for(let i = 0; i < selected.length; i++){
+          result += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
+          console.log("páda nebo stovečka")
+        }
+        
       }
-      
-    }
+  else if(nums[0] > 2 && nums[0] == selected.length)//jedničky
+  {
+    result += (nums[0] -2) * 1000;
   }
+  else if(nums.find((element) => element > 2) != undefined && nums.find((element) => element > 2) == selected.length) //x* cislo
+  {
+    let elements = nums.indexOf(nums.find((element) => element > 2));
+    let multi = (elements == 4) ? 100 : (elements == 5) ? 200 : (elements == 6) ? 400 : 800;
+    result += (elements+1) * multi;
+    isXtimesNum = false;
+    console.log(elements);
+    console.log("x*cislo");
+  }
+  console.log(result);
   return result;
 }
 
