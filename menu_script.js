@@ -4,14 +4,10 @@ const container = document.getElementById('button-container');
 
 const menu = {
   main: ["start", "rules", "settings"],
-  start: ["oneVOne", "oneVAi"],
-  oneVAi: ["easy", "medium", "hard"],
   settings: ["volume", "music volume"],
 };
 const menuCZ = {
   main: ["Hrát", "Pravidla", "Nastavení"],
-  start: ["1v1", "1vAI"],
-  oneVAi: ["Snadné", "Střední", "Těžké"],
   settings: ["Hlasitost", "Hlasitost hudby"],
 };
 
@@ -56,19 +52,7 @@ function createMenu(menuName) {
             break;
         case 'oneVOne':
             console.log("1v1 game");
-            //startGame(0);
-            break;
-        case 'easy':
-            console.log("Easy AI");
-            //startGame(1);
-            break;
-        case 'medium':
-            console.log("Medium AI");
-            //startGame(2);
-            break;
-        case 'hard':
-            console.log("Hard AI");
-            //startGame(3);
+            startGame();
             break;
         default:
             error("Unknown action: " + name);
@@ -92,3 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0); // Delay adding the animation class to give time for initial style setup
       });
 });
+
+function hideMenuContainer() {
+document.getElementById('menu').style.display = 'none';
+}

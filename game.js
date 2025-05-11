@@ -93,14 +93,7 @@ function updateScore(){
   document.getElementById('playerScore').innerText = players[onTurn].score;
 }
 
-function startGame(setting){
-  /*
-  inputy:
-  0 - hrac proti hraci
-  1 - hrac proti ai (easy)
-  2 - hrac proti ai (medium)
-  3 - hrac proti ai (hard)
-  */
+function startGame(){
   hideMenuContainer();
   console.log('menu hidden');
   document.getElementById('game').style.display = 'flex';
