@@ -184,17 +184,6 @@ function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min + 1) ) + min;
   }
 
-  function isAllPairs(arr) {
-      if (arr.length !== 6) return false; // Ensure the array has exactly 6 elements
-  
-      const countMap = arr.reduce((acc, num) => {
-          acc[num] = (acc[num] || 0) + 1;
-          return acc;
-      }, {});
-  
-      return Object.values(countMap).every(count => count === 2);
-}
-
 function areArraysEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) return false; // Check length first
 
@@ -202,83 +191,118 @@ function areArraysEqual(arr1, arr2) {
   return arr1.sort().toString() === arr2.sort().toString();
 }
 
-function logPoints(selected){
-  let result = 0;
-  selected.sort(function(a, b){return a - b});
-  outerLoop:
-  for(let i = selected.length; i > 0; i--){
-    for(let j = 0; j < selected.length; j++){
-      if(selected.length == 1){
-        result += getPoints(selected);
-        break outerLoop;
-      }
-      else{
-      result += getPoints(checkForMax(selected, i,j));
-      console.log(checkForMax(selected, i,j));
-      if(getPoints(checkForMax(selected, i,j)) > 0){
-        selected = subtractArrays(selected, checkForMax(selected, i,j));
-      }
-    }
-    }
-  }
-  return result;
-}
 function subtractArrays(arr1, arr2) {
   return arr1.filter(item => !arr2.includes(item));
 }
-let isXtimesNum = false;
-function getPoints(selected) //vraci pocet pointu
+
+function sequence(selected)
 {
   let result = 0;
   let seq = [1,2,3,4,5,6];
-  let nums = [0,0,0,0,0,0];
-
-  for(let i = 0; i < selected.length; i++) // checks for three nums
-    { 
-      for(let j = 0; j < 6; j++)
-      {
-        if(selected[i] == j+1)
-          {
-            nums[j]++;
-          }
-      }
-    }
-    if(nums.find((element) => element > 2) != undefined){
-      isXtimesNum = true;
-    }
-    console.log(selected);
   if(areArraysEqual(selected,seq)) //postupka
   {
-    result += 1500; 
-    console.log("postupka")
+    result = 1500;
+    console.log("postupka");
   }
-  else if(isAllPairs(selected) == true)
-    {
-      result += 1000;
-      console.log("mary");
-    }
-  else if(selected.length < 4 && !isXtimesNum)
-      {
-        for(let i = 0; i < selected.length; i++){
-          result += (selected[i] == 5) ? 50 : (selected[i] == 1) ? 100 : 0;
-          console.log("páda nebo stovečka")
+  return result;
+}
+
+function singls(ints){
+  let sinRes = 0;
+      for(let i = 0; i < ints.length; i++){
+        if(ints[i] == 5){
+          sinRes += 50;
         }
-        
+        if(ints[i] == 1){
+          sinRes += 100;
+        }
+      } 
+    console.log("pade nebo sto");
+    return sinRes;
+}
+
+function filterNums(ints){
+  results = [
+    {
+      count: 0,
+      num: 0
+    },
+    {
+      count: 0,
+      num: 0
+    }]
+  let resultIndex = 0;
+
+  for(let i = 1; i <= 6; i++){
+    let count = 0;
+    for(let  j = 0; j < ints.length; j++){
+      count = ints.filter((n) => n == i ).length;
+    }
+    if(count > 2){
+      results[resultIndex] = {
+        count: count,
+        num: i
       }
-  else if(nums[0] > 2 && nums[0] == selected.length)//jedničky
-  {
-    result += (nums[0] -2) * 1000;
+      resultIndex++; //muze obsahovat vicekrat 3 cisla
+    }
   }
-  else if(nums.find((element) => element > 2) != undefined && nums.find((element) => element > 2) == selected.length) //x* cislo
-  {
-    let elements = nums.indexOf(nums.find((element) => element > 2));
-    let multi = (elements == 4) ? 100 : (elements == 5) ? 200 : (elements == 6) ? 400 : 800;
-    result += (elements+1) * multi;
-    isXtimesNum = false;
-    console.log(elements);
+
+  return results;
+}
+
+function multiNums(ints){
+  let result = 0;
+  result += xTimesNum(ints,0);
+  let filter = filterNums(ints);
+  if(filter[1].num != 0 ){
+    result += xTimesNum(ints, 1);
+  }
+  return result;
+}
+
+function xTimesNum(ints, filterIndex){
+  let filter = filterNums(ints)[filterIndex];
+  let result = 0;
+    let multi = (filter.count == 3) ? 100 : (filter.count == 4) ? 200 : (filter.count == 5) ? 400 : 800;
+    let isOne = (filter.num == 1) ? 10 : 1;
+    result += (filter.num) * multi * isOne;
+    console.log(filter);
     console.log("x*cislo");
+  let toRemove = [];
+  for(let i = 0; i < filter.count; i++){
+    toRemove[i] = filter.num;
   }
-  console.log(result);
+  nums = subtractArrays(nums, toRemove);
+  return result;
+}
+
+function isAllPairs(arr) {
+    if (arr.length !== 6) return 0; // Ensure the array has exactly 6 elements
+
+    const countMap = arr.reduce((acc, num) => {
+        acc[num] = (acc[num] || 0) + 1;
+        return acc;
+    }, {});
+
+    return Object.values(countMap).every(count => count === 2) ? 1000 : 0;
+}
+
+let nums = []
+function logPoints(selected) //vraci pocet pointu
+{
+  selected.sort(function(a, b){return a - b});
+  nums = selected;
+  let result = 0;
+  if(sequence(nums) != 0){
+    result += sequence(nums);
+  }
+  else if (isAllPairs(nums) != 0){
+    result += isAllPairs(nums);
+  }
+  else{
+    result += multiNums(nums);
+    result += singls(nums);
+  }
   return result;
 }
 
