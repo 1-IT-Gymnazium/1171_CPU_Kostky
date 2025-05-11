@@ -12,6 +12,9 @@ const diceImages = [
   'Files/Dices/five.png',
   'Files/Dices/six.png'
 ];
+const bg_music = new Audio('Files/Sound/bg_music.mp3');
+bg_music.loop = true;
+
 const clickSoundEffects = [
   new Audio('Files/Sound/Click1.wav'),
   new Audio('Files/Sound/Click2.wav'),
@@ -118,7 +121,8 @@ function startGame(){
   hideMenuContainer();
   console.log('menu hidden');
   document.getElementById('game').style.display = 'flex';
- dices = roll(6);
+  dices = roll(6);
+  bg_music.play();
 }
 
 function setScore() 
