@@ -1,95 +1,94 @@
 // menu_script.js
+const root = document.documentElement;
+const container = document.getElementById('button-container');
 
-// Define the menus object (with correct syntax)
-const menus = {
-    'menu': document.getElementById('menu'),
-    'start': document.getElementById('start'),
-    'settings': document.getElementById('settings'),
-    'rules': document.getElementById('rules'),
-    'difficulty': document.getElementById('difficulty')
+const menu = {
+  main: ["start", "rules", "settings"],
+  start: ["oneVOne", "oneVAi"],
+  oneVAi: ["easy", "medium", "hard"],
+  settings: ["volume", "music volume"],
+};
+const menuCZ = {
+  main: ["Hrát", "Pravidla", "Nastavení"],
+  start: ["1v1", "1vAI"],
+  oneVAi: ["Snadné", "Střední", "Těžké"],
+  settings: ["Hlasitost", "Hlasitost hudby"],
 };
 
-// buttons
-const startButton = document.getElementById('startButton');
-const settingsButton = document.getElementById('settingsButton');
-const rulesButton = document.getElementById('rulesButton');
-// start buttons
-const oneVOneButton = document.getElementById('oneVOneButton');
-const oneVAiButton = document.getElementById('oneVAiButton');
-
-// difficulty buttons
-const easyButton = document.getElementById('easyButton');
-const mediumButton = document.getElementById('mediumButton');
-const hardButton = document.getElementById('hardButton');
-
-const volumeSlider = document.getElementById('volumeSlider');
-const musicSlider = document.getElementById('musicSlider');
-
-const volumeSliderValue = document.getElementById('volumeSliderValue');
-const musicSliderValue = document.getElementById('musicSliderValue');
-
-// Update the volume value when the slider is changed
-volumeSlider.addEventListener('input', () => {
-    volumeSliderValue.textContent = volumeSlider.value;
-    console.log(volumeSlider.value);
-    changeVolume(volumeSlider.value);
-});
-
-// Update the music volume value when the slider is changed
-musicSlider.addEventListener('input', () => {
-    musicSliderValue.textContent = musicSlider.value;
-});
-
-
-
-// Function to update the menu based on menuState
-function menuUpdate(menuState) {
-    // Hide all menus first
-    for (let i in menus) {
-        menus[i].style.display = 'none';
+function createMenu(menuName) {
+    container.innerHTML = ''; // Clear old buttons
+  
+    const keys = menu[menuName]; // backend keys
+    const labels = menuCZ[menuName]; // display labels
+  
+    keys?.forEach((key, i) => {
+      const btn = document.createElement('button');
+      btn.innerText = labels[i]; // show Czech label
+      btn.dataset.key = key; // store backend key
+      btn.onclick = () => {
+        if (menu[key]) {
+          createMenu(key); // submenu
+        } else {
+          handleAction(key); // backend logic
+        }
+      };
+      container.appendChild(btn);
+    });
+  
+    if (menuName !== 'main') {
+      const backBtn = document.createElement('button');
+      backBtn.innerText = 'Zpět'; // Czech for Back
+      backBtn.onclick = () => createMenu('main');
+      container.appendChild(backBtn);
     }
-    // Show the selected menu
-    menus[menuState].style.display = 'flex';
-}
-function hideMenuContainer(){
-    document.getElementById('menuContainer').style.display = 'none';
-}
+  }
+  
+  
+  function handleAction(name) {
+    switch (name) {
+        case 'start':
+            console.log("Start game");
+            startGame();
+            break;
+        case 'rules':
+            console.log("Show rules");
+            window.location.href = ("https://www.kramekprodeti.cz/fotky45931/fotov/_ps_42351Pravidla-her-v-kostky.pdf");
+            break;
+        case 'oneVOne':
+            console.log("1v1 game");
+            //startGame(0);
+            break;
+        case 'easy':
+            console.log("Easy AI");
+            //startGame(1);
+            break;
+        case 'medium':
+            console.log("Medium AI");
+            //startGame(2);
+            break;
+        case 'hard':
+            console.log("Hard AI");
+            //startGame(3);
+            break;
+        default:
+            error("Unknown action: " + name);
+            break;
+    }
+  }
 
-// Event Listeners
-startButton.addEventListener("click", () => {
-    menuUpdate('start');
-});
+  
+createMenu('main'); // Start with main menu
 
-settingsButton.addEventListener("click", () => {
-    menuUpdate('settings');
+document.addEventListener('DOMContentLoaded', () => {
+    buttons = document.querySelectorAll('#button-container > *');
+    console.log(buttons);
+    buttons.forEach((button, index) => {
+        button.style.opacity = '0';
+        button.style.transform = 'translateY(-300%)';
+        setTimeout(() => {
+          button.style.animation = `slideInFromTop 1.5s ease-in forwards`; // Trigger animation
+          button.style.animationDelay = `${0.5 + index * 0.25}s`; // Adjust delay for each button
+          root.style.setProperty('--menuButtonsOpacity', '1');
+        }, 0); // Delay adding the animation class to give time for initial style setup
+      });
 });
-
-rulesButton.addEventListener("click", () => {
-    menuUpdate('rules');
-});
-
-oneVOneButton.addEventListener("click", () => {
-    startGame(0);
-});
-
-oneVAiButton.addEventListener("click", () => {
-    menuUpdate('difficulty');
-});
-
-easyButton.addEventListener("click", () => {
-    startGame(1);
-    // start game with ai on easy difficulty
-});
-mediumButton.addEventListener("click", () => {
-    startGame(2);
-    // start game with ai on medium difficulty
-});
-hardButton.addEventListener("click", () => {
-    startGame(3);
-    // start game with ai on hard difficulty
-});
-
-// This function will be used in your script.js
-function startMenu() {
-    menuUpdate('menu'); // Start with the main menu visible
-}

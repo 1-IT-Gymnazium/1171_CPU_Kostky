@@ -7,50 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 
         <!-- FONTY-->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <!--<link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap" rel="stylesheet">-->
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="menuContainer" id="menuContainer">
-        <div id="menu">
-            <div class="text"><h1>Kostky</h1></div>
-            <div class="button" id="startButton">Hrát</div>
-            <div class="button" id="settingsButton">Nastavení</div>
-            <div class="button" id="rulesButton">Pravidla</div>
-        </div>
-        <div id="start">
-            <div class="button" id="oneVOneButton">1v1</div>
-            <div class="button" id="oneVAiButton">1vAi</div>
-            <div class="button" onclick="menuUpdate('menu')">Zpátky</div>
-        </div>
-        <div id="difficulty">
-            <div class="text">Choose Ai difficulty</div>
-            <div class="button" id="easyButton">Lehké</div>
-            <div class="button" id="mediumButton">Střední</div>
-            <div class="button" id="hardButton">Těžké</div>
-            <div class="button" onclick="menuUpdate('menu')">Zpátky</div>
-        </div>
-        <div id="settings">
-            <div class="text">Hlasitost zvukových efektů</div>
-            <div class="sliderContainer">
-                <div class="text" id="volumeSliderValue">50</div>
-                <input class="slider" type="range" id="volumeSlider" value="50">
-            </div>
-            
-            <div class="text">Hlasitost hudby</div>
-            <div class="sliderContainer">
-                <div class="text" id="musicSliderValue">50</div>
-                <input class="slider" type="range" id="musicSlider" value="50">
-            </div>
-                        
-            <div class="button" onclick="menuUpdate('menu')">Zpátky</div>
-        </div>
-        <div id="rules">
-            <div class="text">Pravidla</div>
-            <div class="text"><a href="https://www.kramekprodeti.cz/fotky45931/fotov/_ps_42351Pravidla-her-v-kostky.pdf">pravidla.pdf</a></div>
-            <div class="button" onclick="menuUpdate('menu')">Zpátky</div>
-        </div>
+    <div id="menu">
+        <h1>Kostky</h1>
+        <div id="button-container"></div>
     </div>
     <div id="game">
         <div class="innerGameContainer">
@@ -67,6 +32,11 @@
     </div>
     <!-- Skripty -->
     <script src="menu_script.js"></script>
-    <script src="game.js"></script>
-    <script src="script.js"></script></body>
+    <!--<script src="game.js"></script>
+    <script src="script.js"></script></body>-->
+    <script>
+        if (window.innerWidth < 768) {
+          document.body.innerHTML = "<h1 style='text-align:center;padding:2rem;'>Not supported on mobile devices.</h1>";
+        }
+      </script>
 </html>
