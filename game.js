@@ -21,6 +21,20 @@ const clickSoundEffects = [
   new Audio('Files/Sound/Click6.wav'),
   new Audio('Files/Sound/Click7.wav')
 ]
+let players = [
+  {
+    name: 1,
+    score: 0,
+    isPlaying: true,
+    color: '#ff0000'
+  },
+  {
+    name: 2,
+    score: 0,
+    isPlaying: false,
+    color: '#0000ff'
+  }
+]
 
 function changeVolume(volume){
   clickSoundEffects.forEach(element => {
@@ -38,12 +52,18 @@ endTurnButton.addEventListener('click', function() {
 });
 
 function rollButtonFunction(){
+  updateInfo();
   turnScore += logPoints(getSelectedDices());
+  if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
+    turnScore = 0;
+    endTurnButton();
+  }
+
   dicesTurnCount -= getSelectedDices().length;
   roll(dicesTurnCount);
 }
 function endTurnButtonFunction(){
-  turnScore += logPoints(getSelectedDices());
+  rollButtonFunction();
   saveScore();
   if(players[0].isPlaying){
     players[0].isPlaying = false;
@@ -65,32 +85,33 @@ function saveScore(){
 function startNewTurn(){
   //let onTurn = players.find(player => player.isPlaying).name - 1;
   //dicesTable.style.backgroundColor = players[onTurn].color;
+  updateInfo();
   dicesTurnCount = 6;
   turnScore = 0;
   roll(dicesTurnCount);
 }
-
-let players = [
-  {
-    name: 1,
-    score: 0,
-    isPlaying: true,
-    color: '#ff0000'
-  },
-  {
-    name: 2,
-    score: 0,
-    isPlaying: false,
-    color: '#0000ff'
-  }
-]
+function updateInfo(){
+  let onTurn = players.find(player => player.isPlaying).name -1;
+  console.log(onTurn);
+  document.getElementById('playerName').innerText = players[onTurn].name;
+  document.getElementById('playerScore').innerText = players[onTurn].score;
+  document.getElementById('playerRolls').style.backgroundColor = turnScore;
+  //document.getElementById('playerRoll').style.backgroundColor = currentroll;
+}
 
 function updateScore(){
   let onTurn = players.find(player => player.isPlaying).name;
   console.log(onTurn);
   players[onTurn].score += turnScore;
+  checkGameOver();
   turnScore = 0;
   document.getElementById('playerScore').innerText = players[onTurn].score;
+}
+
+function checkGameOver(){
+  if(players.find(player => player.score == 2500) < 0){
+    // game over
+  }
 }
 
 function startGame(){
