@@ -8,7 +8,8 @@
 *{
     padding: 0;
     margin: 0;
-    font-family: "Lexend Giga", serif;
+    font-family: "MedievalSharp", cursive;
+    font-weight: 700;
     color: var(--textColor);
 
     user-select: none; /* Prevents text selection */
@@ -29,6 +30,7 @@ body{
     align-items: center;
     /*background: linear-gradient(135deg, #4b4b4b, #2a2a2a);*/
     background-color: var(--backgroundColor);
+    overflow: hidden;
 }
 
 #menu{
@@ -86,6 +88,15 @@ body{
     letter-spacing: 0.5rem;
     padding: 1rem;
 }
+.score{
+  font-size: 2rem;
+  color: var(--textColor);
+  letter-spacing: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
 .infoBox > button{
     font-size: 2rem;
     width: 80%;
@@ -100,6 +111,12 @@ body{
     opacity: var(--menuButtonsOpacity);
     border: 0.2rem solid #997949;
     border-radius: 1rem;
+}
+.player1, .player2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 /*#button-container > *{
     font-size: 2rem;
@@ -176,23 +193,18 @@ body{
     width: 100%;
     height: auto;
 }
-.playerOne, .playerTwo{
-    width: 20%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
 .dicesTable{
     aspect-ratio: 1 / 1;
-    width: 600px;
-    height: 400px;
+    width: auto;
+    height: auto;
     padding: 10%;
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: repeat(9, 1fr);
     gap: 10px;
-    border: 2px solid black;
+    border-radius: 40px;
+    background-color: var(--textColor);
+    border: 0.6rem solid #997949;
     position: relative;
     justify-items: center;
     align-items: center;

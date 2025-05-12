@@ -55,12 +55,12 @@ endTurnButton.addEventListener('click', function() {
 });
 
 function rollButtonFunction(){ //tlacitko pro dalsi roll
-  updateInfo();
   turnScore += logPoints(getSelectedDices());
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
     endTurnButtonFunction();
   }
+  updateInfo();
 
   dicesTurnCount -= getSelectedDices().length;
   if(dicesTurnCount < 1)
@@ -88,6 +88,7 @@ function endTurnButtonFunction(){ //tlacitko na ukonceni tahu
   }
   console.log("player 1 score is " + players[0].score);
   console.log("player 2 score is " + players[1].score);
+  checkGameOver();
   startNewTurn();
 }
 function saveScore(){ //uklada score
@@ -103,27 +104,29 @@ function startNewTurn(){ //zacina novy tah
   turnScore = 0;
   roll(dicesTurnCount);
 }
-function updateInfo(){ //aktualizuje score jmeno hrace adt.
-  let onTurn = players.find(player => player.isPlaying).name -1;
-  console.log(onTurn);
-  document.getElementById('playerName').innerText = players[onTurn].name;
-  document.getElementById('playerScore').innerText = players[onTurn].score;
-  document.getElementById('playerRolls').style.backgroundColor = turnScore;
-  //document.getElementById('playerRoll').style.backgroundColor = currentroll;
+function updateInfo(){ //aktualizuje score jmeno hrace adt. 
+  document.getElementById('player1Name').innerText = players[0].name;
+  document.getElementById('player1Score').innerText = players[0].score;
+  document.getElementById('player2Name').innerText = players[1].name;
+  document.getElementById('player2Score').innerText = players[1].score;
+  document.getElementById('turnScore').innerText = turnScore;
 }
 
 function updateScore(){
   let onTurn = players.find(player => player.isPlaying).name;
   console.log(onTurn);
   players[onTurn].score += turnScore;
-  checkGameOver();
   turnScore = 0;
   document.getElementById('playerScore').innerText = players[onTurn].score;
 }
 
 function checkGameOver(){
-  if(players.find(player => player.score == 2500) < 0){
-    // game over
+  let winner = players.find(player => player.score >=  2500)
+  if(winner == 0){
+     document.getElementById('player1Score').innerText = "winner";
+  }
+  if(winner == 1){
+     document.getElementById('player2Score').innerText = "winner";
   }
 }
 
@@ -133,6 +136,7 @@ function startGame(){ //zacatek
   document.getElementById('game').style.display = 'flex';
   dices = roll(6);
   bg_music.play();
+  updateInfo();
 }
 
 function setScore() 

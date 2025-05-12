@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kostky</title>
     <link rel="stylesheet" href="styles.css">
-
-        <!-- FONTY-->
-        <!--<link rel="preconnect" href="https://fonts.googleapis.com">
+        <!-- FONT-->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap" rel="stylesheet">-->
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative&display=swap" rel="stylesheet">
-</head>
+        <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    </head>
 <body>
     <div id="menu">
         <h1>Kostky</h1>
@@ -20,11 +18,19 @@
     <div id="game">
         <div class="innerGameContainer">
             <div class="dicesTable" id="dicesTable"></div>
+
             <div class="infoBox">
-                <div class="text">Hráč: <span id="playerName">1</span></div>
-                <div class="text">Skóre: <span id="playerScore">0</span></div>
-                <div class="text">Počet hodů: <span id="playerRolls">0</span></div>
-                <div class="text">Aktuální hod: <span id="playerRoll">0</span></div>
+                <div class="score">
+                    <div class="player1">
+                        <div class="text">Hráč: <span id="player1Name">1</span></div>
+                        <div class="text">Skóre: <span id="player1Score">0</span></div>
+                    </div>
+                    <div class="player2">
+                        <div class="text">Hráč: <span id="player2Name">2</span></div>
+                        <div class="text">Skóre: <span id="player2Score">0</span></div>
+                    </div>
+                </div>
+                <div class="text">Skóre tahu: <span id="turnScore">0</span></div>
                 <button id="rollButton">Hodit</button>
                 <button id="endTurnButton">Konec tahu</button>
             </div>  
