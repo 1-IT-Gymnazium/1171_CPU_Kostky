@@ -39,7 +39,7 @@ let players = [
   }
 ]
 
-function changeVolume(volume){
+function changeVolume(volume){ //mnění hlasitost sound efectů (ne hudby)
   clickSoundEffects.forEach(element => {
     clickSoundEffects[element].volume = volume;
   });
@@ -54,20 +54,30 @@ endTurnButton.addEventListener('click', function() {
   endTurnButtonFunction();
 });
 
-function rollButtonFunction(){
+function rollButtonFunction(){ //tlacitko pro dalsi roll
   updateInfo();
   turnScore += logPoints(getSelectedDices());
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
-    endTurnButton();
+    endTurnButtonFunction();
   }
 
   dicesTurnCount -= getSelectedDices().length;
+  if(dicesTurnCount < 1)
+  {
+    dicesTurnCount = 6;
+  }
   roll(dicesTurnCount);
 }
-function endTurnButtonFunction(){
-  rollButtonFunction();
+function endTurnButtonFunction(){ //tlacitko na ukonceni tahu
+  updateInfo();
+  turnScore += logPoints(getSelectedDices());
+  if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
+    turnScore = 0;
+  }
+  if((turnScore + logPoints(getSelectedDices())) >= 400 && ((dicesTurnCount - getSelectedDices().length) < 3)){
   saveScore();
+  }
   if(players[0].isPlaying){
     players[0].isPlaying = false;
     players[1].isPlaying = true;
@@ -80,12 +90,12 @@ function endTurnButtonFunction(){
   console.log("player 2 score is " + players[1].score);
   startNewTurn();
 }
-function saveScore(){
+function saveScore(){ //uklada score
   let onTurn = players.find(player => player.isPlaying).name - 1;
   players[onTurn].score += turnScore;
   turnScore = 0;
 }
-function startNewTurn(){
+function startNewTurn(){ //zacina novy tah
   //let onTurn = players.find(player => player.isPlaying).name - 1;
   //dicesTable.style.backgroundColor = players[onTurn].color;
   updateInfo();
@@ -93,7 +103,7 @@ function startNewTurn(){
   turnScore = 0;
   roll(dicesTurnCount);
 }
-function updateInfo(){
+function updateInfo(){ //aktualizuje score jmeno hrace adt.
   let onTurn = players.find(player => player.isPlaying).name -1;
   console.log(onTurn);
   document.getElementById('playerName').innerText = players[onTurn].name;
@@ -117,7 +127,7 @@ function checkGameOver(){
   }
 }
 
-function startGame(){
+function startGame(){ //zacatek
   hideMenuContainer();
   console.log('menu hidden');
   document.getElementById('game').style.display = 'flex';
@@ -180,10 +190,14 @@ function getSelectedDices(){
       selected.push(dices[i].index);
     }
   }
+  if(selected.length == 0)
+  {
+    selected = [0];
+  }
   return selected;
 }
 
-//roll(6);
+
 function roll(count){// 6 deflaut
   generateDices(rollDices(count))
 }
@@ -213,7 +227,7 @@ function subtractArrays(arr1, arr2) {
   return arr1.filter(item => !arr2.includes(item));
 }
 
-function sequence(selected)
+function sequence(selected) //checks for sequence
 {
   let result = 0;
   let seq = [1,2,3,4,5,6];
@@ -225,7 +239,7 @@ function sequence(selected)
   return result;
 }
 
-function singls(ints){
+function singls(ints){ //checks for 1s and 5s
   let sinRes = 0;
       for(let i = 0; i < ints.length; i++){
         if(ints[i] == 5){
@@ -239,7 +253,7 @@ function singls(ints){
     return sinRes;
 }
 
-function filterNums(ints){
+function filterNums(ints){ //filtruje cisla ktera nejsou ve trojici a vice
   results = [
     {
       count: 0,
@@ -278,7 +292,7 @@ function multiNums(ints){
   return result;
 }
 
-function xTimesNum(ints, filterIndex){
+function xTimesNum(ints, filterIndex){ //vraci pocet bodu za x krat cislo
   let filter = filterNums(ints)[filterIndex];
   let result = 0;
     let multi = (filter.count == 3) ? 100 : (filter.count == 4) ? 200 : (filter.count == 5) ? 400 : 800;
@@ -294,7 +308,7 @@ function xTimesNum(ints, filterIndex){
   return result;
 }
 
-function isAllPairs(arr) {
+function isAllPairs(arr) { //checks for pairs
     if (arr.length !== 6) return 0; // Ensure the array has exactly 6 elements
 
     const countMap = arr.reduce((acc, num) => {
@@ -308,6 +322,11 @@ function isAllPairs(arr) {
 let nums = []
 function logPoints(selected) //vraci pocet pointu
 {
+  if(selected.length == 0)
+    {
+      return 0;
+    }
+  else{
   selected.sort(function(a, b){return a - b});
   nums = selected;
   let result = 0;
@@ -323,17 +342,6 @@ function logPoints(selected) //vraci pocet pointu
   }
   return result;
 }
-
-function hasPoints() //kontroluje jestli hracovi padla neaka hodnota
-{
-  if(logPoints(dices) == 0)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
 }
 
 function easyBot(playersDices){
