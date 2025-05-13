@@ -12,6 +12,7 @@ const menuCZ = {
 };
 
 function createMenu(menuName) {
+  showMenuContainer();
     container.innerHTML = ''; // Clear old buttons
   
     const keys = menu[menuName]; // backend keys
@@ -79,4 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function hideMenuContainer() {
 document.getElementById('menu').style.display = 'none';
+}
+function showMenuContainer() {
+document.getElementById('menu').style.display = 'flex';
+}
+function hideGameContainer() {
+document.getElementById('game').style.display = 'none';
 }

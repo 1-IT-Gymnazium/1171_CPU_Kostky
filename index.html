@@ -16,10 +16,17 @@
         <div id="button-container"></div>
     </div>
     <div id="game">
+        <svg id="endGame" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="#bb9961" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+        <div id="end"></div>
         <div class="innerGameContainer">
             <div class="dicesTable" id="dicesTable"></div>
-
             <div class="infoBox">
+                <div class="text">Hraje hráč <span id="turn">1</span></div>
                 <div class="score">
                     <div class="player1">
                         <div class="text">Hráč: <span id="player1Name">1</span></div>
@@ -31,15 +38,16 @@
                     </div>
                 </div>
                 <div class="text">Skóre tahu: <span id="turnScore">0</span></div>
-                <button id="rollButton">Hodit</button>
-                <button id="endTurnButton">Konec tahu</button>
+                <div class="buttons">
+                    <button id="rollButton">Hodit</button>
+                    <button id="endTurnButton">Konec tahu</button>
+                </div>
             </div>  
         </div>
     </div>
     <!-- Skripty -->
     <script src="menu_script.js"></script>
     <script src="game.js"></script>
-    <script src="script.js"></script></body>
     <script>
         if (window.innerWidth < 768) {
           document.body.innerHTML = "<h1 style='text-align:center;padding:2rem;'>Not supported on mobile devices.</h1>";

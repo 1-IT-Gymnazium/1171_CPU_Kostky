@@ -1,8 +1,10 @@
 let dices = [];
 let turnScore = 0;
-let score = 0;
+//let score = 0;
+let gameIsOver = false;
 
 const dicesTable = document.getElementsByClassName('dicesTable');
+const endGameButton = document.getElementById('endGame');
 
 const diceImages = [
   'Files/Dices/one.png',
@@ -12,8 +14,20 @@ const diceImages = [
   'Files/Dices/five.png',
   'Files/Dices/six.png'
 ];
-const bg_music = new Audio('Files/Sound/bg_music.mp3');
-bg_music.loop = true;
+const bg_musics = [
+  'Files/Sound/bg_music1.mp3',
+  'Files/Sound/bg_music2.mp3',
+  'Files/Sound/bg_music3.mp3',
+  'Files/Sound/bg_music4.mp3'
+];
+
+//const bg_music = new Audio('Files/Sound/bg_music1.mp3');
+const bg_music = new Audio(bg_musics[getRnd(0,3)]);
+
+bg_music.addEventListener('ended', () => {
+  bg_music.src = bg_musics[getRnd(0,3)]; // Pick a new random sound
+  bg_music.play(); // Play the new sound
+});
 
 const clickSoundEffects = [
   new Audio('Files/Sound/Click1.wav'),
@@ -29,13 +43,17 @@ let players = [
     name: 1,
     score: 0,
     isPlaying: true,
-    color: '#ff0000'
+    isWinner: false,
+    color: '#ff0000',
+    isBot: true
   },
   {
     name: 2,
     score: 0,
     isPlaying: false,
-    color: '#0000ff'
+    isWinner: false,
+    color: '#0000ff',
+    isBot: false
   }
 ]
 
@@ -53,25 +71,39 @@ const endTurnButton = document.getElementById('endTurnButton');
 endTurnButton.addEventListener('click', function() {
   endTurnButtonFunction();
 });
+endGameButton.addEventListener('click', function() {
+  createMenu('main');
+  hideGameContainer();
+  bg_music.pause();
+});
 
 function rollButtonFunction(){ //tlacitko pro dalsi roll
   turnScore += logPoints(getSelectedDices());
+  console.log(turnScore);
+  let onTurn = players.find(player => player.isPlaying).name - 1;
+  updateInfo();
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
     endTurnButtonFunction();
   }
-  updateInfo();
-
-  dicesTurnCount -= getSelectedDices().length;
-  if(dicesTurnCount < 1)
-  {
-    dicesTurnCount = 6;
-  }
-  roll(dicesTurnCount);
+  else{
+    if(players[onTurn].isBot){
+      dicesTurnCount -= (dicesTurnCount - nums.length);
+    }
+    else{
+      dicesTurnCount -= getSelectedDices().length;
+    }
+      if(dicesTurnCount < 1)
+      {
+        dicesTurnCount = 6;
+     }
+      roll(dicesTurnCount);
+}
 }
 function endTurnButtonFunction(){ //tlacitko na ukonceni tahu
   updateInfo();
   turnScore += logPoints(getSelectedDices());
+  console.log(turnScore);
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
   }
@@ -97,19 +129,49 @@ function saveScore(){ //uklada score
   turnScore = 0;
 }
 function startNewTurn(){ //zacina novy tah
-  //let onTurn = players.find(player => player.isPlaying).name - 1;
   //dicesTable.style.backgroundColor = players[onTurn].color;
   updateInfo();
   dicesTurnCount = 6;
   turnScore = 0;
   roll(dicesTurnCount);
+  botTurn(); //triggers only if bot on turn
 }
+
+function botTurn(){
+  let onTurn = players.find(player => player.isPlaying).name - 1;
+  if(players[onTurn].isBot){
+    if((turnScore + logPoints(getAllDices())) >= 400 && (dicesTurnCount - getAllDices().length) < 3){
+      endTurnButtonFunction();
+    }
+    else{
+      rollButtonFunction(true);
+      setTimeout(botTurn, 3000);
+    }
+  }
+}
+
 function updateInfo(){ //aktualizuje score jmeno hrace adt. 
-  document.getElementById('player1Name').innerText = players[0].name;
-  document.getElementById('player1Score').innerText = players[0].score;
-  document.getElementById('player2Name').innerText = players[1].name;
-  document.getElementById('player2Score').innerText = players[1].score;
-  document.getElementById('turnScore').innerText = turnScore;
+  if(!gameIsOver)
+  {
+    document.getElementById('player1Name').innerText = players[0].name;
+    document.getElementById('player1Score').innerText = players[0].score;
+    document.getElementById('player2Name').innerText = players[1].name;
+    document.getElementById('player2Score').innerText = players[1].score;
+    document.getElementById('turnScore').innerText = turnScore;
+    document.getElementById('turn').innerText = "" + players.find((player) => player.isPlaying).name;
+  }
+  else{
+    [...document.getElementsByClassName('innerGameContainer')].forEach(el => el.style.display = 'none');
+    if(players.find((player) => player.isWinner) != undefined){
+      document.getElementById('end').innerText = "Player " + players.find((player) => player.isWinner).name + " Won!"; // ten kdo vyhra
+      console.log("smrdi ti koule")
+    }
+    else{
+      console.error("neproslo ti to sracko");
+      
+    }
+  }
+
 }
 
 function updateScore(){
@@ -122,12 +184,18 @@ function updateScore(){
 
 function checkGameOver(){
   let winner = players.find(player => player.score >=  2500)
-  if(winner == 0){
-     document.getElementById('player1Score').innerText = "winner";
+  if(winner != undefined){
+    gameIsOver = true;
+    if(winner.name == 1){
+     players[0].isWinner = true;
+     console.log("player 1 wins");
+    }
+    if(winner.name == 2){
+      players[1].isWinner = true;
+      console.log("player 2 wins");
+    }
   }
-  if(winner == 1){
-     document.getElementById('player2Score').innerText = "winner";
-  }
+  updateInfo();
 }
 
 function startGame(){ //zacatek
@@ -137,11 +205,7 @@ function startGame(){ //zacatek
   dices = roll(6);
   bg_music.play();
   updateInfo();
-}
-
-function setScore() 
-{
-  
+  botTurn(); //triggers only if bot is in game
 }
 
 function generateDices(numbers) {
@@ -196,9 +260,18 @@ function getSelectedDices(){
   }
   if(selected.length == 0)
   {
-    selected = [0];
+    selected = getAllDices();
   }
   return selected;
+}
+
+function getAllDices(){
+  let preDices = document.getElementsByClassName('dice');
+  let dices = [];
+  for(let i = 0; i < preDices.length; i++){
+    dices.push(preDices[i].index);
+  }
+  return dices;
 }
 
 
@@ -301,7 +374,7 @@ function xTimesNum(ints, filterIndex){ //vraci pocet bodu za x krat cislo
   let result = 0;
     let multi = (filter.count == 3) ? 100 : (filter.count == 4) ? 200 : (filter.count == 5) ? 400 : 800;
     let isOne = (filter.num == 1) ? 10 : 1;
-    result += (filter.num) * multi * isOne;
+      result += (filter.num) * multi * isOne;
     console.log(filter);
     console.log("x*cislo");
   let toRemove = [];
@@ -324,8 +397,11 @@ function isAllPairs(arr) { //checks for pairs
 }
 
 let nums = []
+
 function logPoints(selected) //vraci pocet pointu
 {
+  let onTurn = players.find(player => player.isPlaying).name - 1;
+  let isBot = players[onTurn].isBot;
   if(selected.length == 0)
     {
       return 0;
@@ -334,7 +410,7 @@ function logPoints(selected) //vraci pocet pointu
   selected.sort(function(a, b){return a - b});
   nums = selected;
   let result = 0;
-  if(sequence(nums) != 0){
+  if((sequence(nums) != 0)){
     result += sequence(nums);
   }
   else if (isAllPairs(nums) != 0){
@@ -343,36 +419,11 @@ function logPoints(selected) //vraci pocet pointu
   else{
     result += multiNums(nums);
     result += singls(nums);
-  }
-  return result;
-}
-}
-
-function easyBot(playersDices){
-  let maxScore = 0;
-  for(let i = 1; i <= playersDices.length; i++)
-  {
-    for(let j = 0; j < (playersDices.length - i) +1; j++)
-    {
-      let currentScore = logPoints(checkForMax(playersDices, i, j));
-      maxScore = (maxScore < currentScore) ? currentScore : maxScore;
+    nums = subtractArrays(nums, [1,5]);
+    if(nums.length != 0 && !isBot){
+      result = 0;
     }
   }
-  return maxScore;
+    return result;
 }
-
-function checkForMax(arr,length, index){
-  let result  = new Array(length);
-  for(let i = 0; i < length; i++)
-  {
-    if(i + index < arr.length)
-    {
-      result[i] = arr[i + index];
-    }
-    else
-    {
-      result[i] = arr[(i + index) - arr.length];
-    }
-  }
-  return result;
 }
