@@ -4,7 +4,7 @@ let turnScore = 0;
 let gameIsOver = false;
 
 const dicesTable = document.getElementsByClassName('dicesTable');
-const endGameButton = document.getElementById('svg');
+const endGameButton = document.getElementById('endGame');
 
 const diceImages = [
   'Files/Dices/one.png',
@@ -22,7 +22,7 @@ const bg_musics = [
 ];
 
 //const bg_music = new Audio('Files/Sound/bg_music1.mp3');
-let bg_music = new Audio(bg_musics[getRnd(0,3)]);
+const bg_music = new Audio(bg_musics[getRnd(0,3)]);
 
 bg_music.addEventListener('ended', () => {
   bg_music.src = bg_musics[getRnd(0,3)]; // Pick a new random sound
@@ -72,20 +72,10 @@ endTurnButton.addEventListener('click', function() {
   endTurnButtonFunction();
 });
 endGameButton.addEventListener('click', function() {
-  bg_music.pause();
-  bg_music.currentTime = 0;
   createMenu('main');
   hideGameContainer();
-  resetPlayers();
+  bg_music.pause();
 });
-function resetPlayers(){
-  players.forEach((player, index) => {
-    player.score = 0;
-    player.isPlaying = index === 0;
-    player.isWinner = false;
-  });
-  gameIsOver = false;
-}
 
 function rollButtonFunction(){ //tlacitko pro dalsi roll
   turnScore += logPoints(getSelectedDices());
@@ -144,14 +134,13 @@ function startNewTurn(){ //zacina novy tah
   dicesTurnCount = 6;
   turnScore = 0;
   roll(dicesTurnCount);
-  console.log("botTurn");
-  setTimeout(botTurn, 3000); //triggers only if bot on turn
+  botTurn(); //triggers only if bot on turn
 }
 
 function botTurn(){
   let onTurn = players.find(player => player.isPlaying).name - 1;
   if(players[onTurn].isBot){
-    if((turnScore + logPoints(getAllDices())) >= 400 && (dicesTurnCount - getGoodDices().length) < 3 && dicesTurnCount - getGoodDices().length != 0){
+    if((turnScore + logPoints(getAllDices())) >= 400 && (dicesTurnCount - getAllDices().length) < 3){
       endTurnButtonFunction();
     }
     else{
@@ -209,22 +198,14 @@ function checkGameOver(){
   updateInfo();
 }
 
-function startGame(index){ //zacatek
-  if(index == 0){
-    players[0].isBot = false;
-    players[1].isBot = false;
-  }
-  else if(index== 1){
-    players[0].isBot = false;
-    players[1].isBot = true;
-  }
+function startGame(){ //zacatek
   hideMenuContainer();
   console.log('menu hidden');
   document.getElementById('game').style.display = 'flex';
   dices = roll(6);
   bg_music.play();
   updateInfo();
-  setTimeout(botTurn, 3000); //triggers only if bot is in game
+  setTimeout(botTurn()); //triggers only if bot is in game
 }
 
 function generateDices(numbers) {
@@ -279,13 +260,7 @@ function getSelectedDices(){
   }
   if(selected.length == 0)
   {
-    let onTurn = players.find(player => player.isPlaying).name - 1;
-    if(players[onTurn].isBot){
-      selected = getAllDices();
-    }
-    else{
-      selected = [0]
-    }
+    selected = getAllDices();
   }
   return selected;
 }
@@ -451,9 +426,4 @@ function logPoints(selected) //vraci pocet pointu
   }
     return result;
 }
-}
-
-function getGoodDices(){
-  logPoints(getAllDices())
-  return subtractArrays(getAllDices(), nums); 
 }

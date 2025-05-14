@@ -4,10 +4,12 @@ const container = document.getElementById('button-container');
 
 const menu = {
   main: ["start", "rules", "settings"],
+  start: ["oneVOne", "oneVAI"],
   settings: ["volume", "music volume"],
 };
 const menuCZ = {
   main: ["Hrát", "Pravidla", "Nastavení"],
+  start: ["1v1", "1vAI"],
   settings: ["Hlasitost", "Hlasitost hudby"],
 };
 
@@ -53,7 +55,11 @@ function createMenu(menuName) {
             break;
         case 'oneVOne':
             console.log("1v1 game");
-            startGame();
+            startGame(0);
+            break;
+        case 'oneVAI':
+            console.log("1vAI game");
+            startGame(1);
             break;
         default:
             error("Unknown action: " + name);
