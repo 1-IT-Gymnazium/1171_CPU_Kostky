@@ -1,10 +1,15 @@
-<h1>Kostky</h1>
-<h3>KOSTKTYYYYYYYYYYYYYYYYYYYYYYYYYYYY!!!!!!!!!!!!!!!!!!!!!</h3>
-# Kostky Hodnoty
+# Reflexe:
 
-Tento dokument popisuje bodové ohodnocení pro různé kombinace hodů kostkami.
+### Výzvy při vývoji 
+- Funkce pro zapisování bodů (logPoints)
+- PvE herní mód
+- Spojení backendu s frontendem
 
-## Bodové hodnocení
+### Co by se mohlo vylepšit
+- Mód pro více hráčů
+- Ai s lepší strategií
+
+# Počítání bodů:
 
 ### Jednotlivá čísla
 - **1** = 100 bodů
