@@ -6,6 +6,8 @@ let gameIsOver = false;
 const dicesTable = document.getElementsByClassName('dicesTable');
 const endGameButton = document.getElementById('svg');
 
+
+
 const diceImages = [
   'Files/Dices/one.png',
   'Files/Dices/two.png',
@@ -18,11 +20,12 @@ const bg_musics = [
   'Files/Sound/bg_music1.mp3',
   'Files/Sound/bg_music2.mp3',
   'Files/Sound/bg_music3.mp3',
-  'Files/Sound/bg_music4.mp3'
+  'Files/Sound/bg_music4.mp3',
+  'Files/Sound/bg_music5.mp3'
 ];
 
 //const bg_music = new Audio('Files/Sound/bg_music1.mp3');
-let bg_music = new Audio(bg_musics[getRnd(0,3)]);
+let bg_music = new Audio(bg_musics[getRnd(0,bg_musics.length -1)]);
 
 bg_music.addEventListener('ended', () => {
   bg_music.src = bg_musics[getRnd(0,3)]; // Pick a new random sound
@@ -37,7 +40,7 @@ const clickSoundEffects = [
   new Audio('Files/Sound/Click5.wav'),
   new Audio('Files/Sound/Click6.wav'),
   new Audio('Files/Sound/Click7.wav')
-]
+];
 let players = [
   {
     name: 1,
@@ -55,7 +58,7 @@ let players = [
     color: '#0000ff',
     isBot: true
   }
-]
+];
 
 function changeVolume(volume){ //mnění hlasitost sound efectů (ne hudby)
   clickSoundEffects.forEach(element => {
@@ -91,7 +94,6 @@ function rollButtonFunction(){ //tlacitko pro dalsi roll
   turnScore += logPoints(getSelectedDices());
   console.log(turnScore);
   let onTurn = players.find(player => player.isPlaying).name - 1;
-  updateInfo();
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
     endTurnButtonFunction();
@@ -109,6 +111,7 @@ function rollButtonFunction(){ //tlacitko pro dalsi roll
      }
       roll(dicesTurnCount);
 }
+updateInfo();
 }
 function endTurnButtonFunction(){ //tlacitko na ukonceni tahu
   updateInfo();
@@ -148,10 +151,10 @@ function startNewTurn(){ //zacina novy tah
   setTimeout(botTurn, 3000); //triggers only if bot on turn
 }
 
-function botTurn(){
+function botTurn(){ //bot pošlse do logPoints všechny kostky, funkce toleruje chyby pouze botovy
   let onTurn = players.find(player => player.isPlaying).name - 1;
   if(players[onTurn].isBot){
-    if((turnScore + logPoints(getAllDices())) >= 400 && (dicesTurnCount - getGoodDices().length) < 3 && dicesTurnCount - getGoodDices().length != 0){
+    if((turnScore + logPoints(getAllDices())) >= 400 && (dicesTurnCount - getGoodDices().length) < 3 && dicesTurnCount - getGoodDices().length != 0){//jestli můžeš zapsat, zapiš
       endTurnButtonFunction();
     }
     else{
@@ -194,7 +197,7 @@ function updateScore(){
 }
 
 function checkGameOver(){
-  let winner = players.find(player => player.score >=  2500)
+  let winner = players.find(player => player.score >=  4000)
   if(winner != undefined){
     gameIsOver = true;
     if(winner.name == 1){
