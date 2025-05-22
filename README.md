@@ -8,6 +8,7 @@
 ### Co by se mohlo vylepšit
 - Mód pro více hráčů
 - Ai s lepší strategií
+- Copiright free hudba
 
 # Počítání bodů:
 
