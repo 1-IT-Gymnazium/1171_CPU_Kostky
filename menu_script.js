@@ -3,14 +3,12 @@ const root = document.documentElement;
 const container = document.getElementById('button-container');
 
 const menu = {
-  main: ["start", "rules", "settings"],
+  main: ["start", "rules"],
   start: ["oneVOne", "oneVAI"],
-  settings: ["volume", "music volume"],
 };
 const menuCZ = {
-  main: ["Hrát", "Pravidla", "Nastavení"],
+  main: ["Hrát", "Pravidla"],
   start: ["1v1", "1vAI"],
-  settings: ["Hlasitost", "Hlasitost hudby"],
 };
 
 function createMenu(menuName) {
