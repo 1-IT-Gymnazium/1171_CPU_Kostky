@@ -3,27 +3,26 @@ const root = document.documentElement;
 const container = document.getElementById('button-container');
 
 const menu = {
-  main: ["start", "rules", "settings"],
-  start: ["oneVOne", "oneVAI"],
-  settings: ["volume", "music volume"],
+  main: ["start", "rules"],
+  start: ["oneVOne", "oneVAI"]
 };
 const menuCZ = {
-  main: ["Hrát", "Pravidla", "Nastavení"],
-  start: ["1v1", "1vAI"],
-  settings: ["Hlasitost", "Hlasitost hudby"],
+  main: ["Hrát", "Pravidla"],
+  start: ["1v1", "1vAI"]
 };
 
 function createMenu(menuName) {
   showMenuContainer();
-    container.innerHTML = ''; // Clear old buttons
+    container.innerHTML = ''; // Maže staré tlačítka
   
-    const keys = menu[menuName]; // backend keys
-    const labels = menuCZ[menuName]; // display labels
+    const keys = menu[menuName];
+    const labels = menuCZ[menuName];
   
     keys?.forEach((key, i) => {
       const btn = document.createElement('button');
-      btn.innerText = labels[i]; // show Czech label
-      btn.dataset.key = key; // store backend key
+      //const sld = document.createElement(''); //tady musi byt slider
+      btn.innerText = labels[i]; // ukáže český název
+      btn.dataset.key = key; 
       btn.onclick = () => {
         if (menu[key]) {
           createMenu(key); // submenu
@@ -33,8 +32,10 @@ function createMenu(menuName) {
       };
       container.appendChild(btn);
     });
+    
+
   
-    if (menuName !== 'main') {
+    if (menuName !== 'main' ) {
       const backBtn = document.createElement('button');
       backBtn.innerText = 'Zpět'; // Czech for Back
       backBtn.onclick = () => createMenu('main');
@@ -66,7 +67,6 @@ function createMenu(menuName) {
             break;
     }
   }
-
   
 createMenu('main'); // Start with main menu
 
@@ -83,6 +83,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0); // Delay adding the animation class to give time for initial style setup
       });
 });
+
+function hideSettringsContainer(){
+  document.getElementById('settings').style.display = 'none';
+}
+
+function showButtonContainer() {
+document.getElementById('button-container').style.display = 'flex';
+}
+
+function hideButtonContainer() {
+document.getElementById('button-container').style.display = 'none';
+}
+
+function showSettingsContainer() {
+document.getElementById('settings').style.display = 'flex';
+}
 
 function hideMenuContainer() {
 document.getElementById('menu').style.display = 'none';

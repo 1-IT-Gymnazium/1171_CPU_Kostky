@@ -18,10 +18,6 @@ const diceImages = [
 ];
 const bg_musics = [
   'Files/Sound/bg_music1.mp3',
-  'Files/Sound/bg_music2.mp3',
-  'Files/Sound/bg_music3.mp3',
-  'Files/Sound/bg_music4.mp3',
-  'Files/Sound/bg_music5.mp3'
 ];
 
 //const bg_music = new Audio('Files/Sound/bg_music1.mp3');
@@ -96,6 +92,7 @@ function rollButtonFunction(){ //tlacitko pro dalsi roll
   let onTurn = players.find(player => player.isPlaying).name - 1;
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
+    updateInfo();
     endTurnButtonFunction();
   }
   else{
@@ -120,7 +117,7 @@ function endTurnButtonFunction(){ //tlacitko na ukonceni tahu
   if(logPoints(getSelectedDices()) == 0){ // jestli hrac detostane zadne skore tak konci tah
     turnScore = 0;
   }
-  if((turnScore + logPoints(getSelectedDices())) >= 400 && ((dicesTurnCount - getSelectedDices().length) < 3)){
+  if((turnScore) >= 400 && ((dicesTurnCount - getSelectedDices().length) < 3)){
   saveScore();
   }
   if(players[0].isPlaying){
@@ -133,6 +130,7 @@ function endTurnButtonFunction(){ //tlacitko na ukonceni tahu
   }
   console.log("player 1 score is " + players[0].score);
   console.log("player 2 score is " + players[1].score);
+  updateInfo();
   checkGameOver();
   startNewTurn();
 }
@@ -152,13 +150,35 @@ function startNewTurn(){ //zacina novy tah
 }
 
 function botTurn(){ //bot pošlse do logPoints všechny kostky, funkce toleruje chyby pouze botovy
-  let onTurn = players.find(player => player.isPlaying).name - 1;
+  if(players[0].score > players[1].score){
+    riskyBot();
+  }
+  else{
+    saveBot();
+  }
+}
+
+function riskyBot(){
+    let onTurn = players.find(player => player.isPlaying).name - 1;
   if(players[onTurn].isBot){
-    if((turnScore + logPoints(getAllDices())) >= 400 && (dicesTurnCount - getGoodDices().length) < 3 && dicesTurnCount - getGoodDices().length != 0){//jestli můžeš zapsat, zapiš
+    if((turnScore + logPoints(getBotsDices())) >= 400 && (dicesTurnCount - getGoodDices().length) < 3 && (dicesTurnCount - getGoodDices().length != 0 || (players[onTurn].score + turnScore + getGoodDices()) == 4000)){//jestli můžeš zapsat, zapiš
       endTurnButtonFunction();
     }
     else{
-      rollButtonFunction(true);
+      rollButtonFunction();
+      setTimeout(botTurn, 3000);
+    }
+  }
+}
+
+function saveBot(){
+  let onTurn = players.find(player => player.isPlaying).name - 1;
+  if(players[onTurn].isBot){
+    if((turnScore + logPoints(getBotsDices())) >= 400 && (dicesTurnCount - getGoodDices().length) < 3){//jestli můžeš zapsat, zapiš
+      endTurnButtonFunction();
+    }
+    else{
+      rollButtonFunction();
       setTimeout(botTurn, 3000);
     }
   }
@@ -226,10 +246,8 @@ function startGame(index){ //zacatek
   document.getElementById('game').style.display = 'flex';
   dices = roll(6);
   bg_music.play();
-  updateInfo();
-  setTimeout(botTurn, 3000); //triggers only if bot is in game
+  updateInfo(); //triggers only if bot is in game
 }
-
 function generateDices(numbers) {
   const container = document.getElementById("dicesTable");
   container.innerHTML = "";
@@ -284,7 +302,7 @@ function getSelectedDices(){
   {
     let onTurn = players.find(player => player.isPlaying).name - 1;
     if(players[onTurn].isBot){
-      selected = getAllDices();
+      selected = getBotsDices();
     }
     else{
       selected = [0]
@@ -293,7 +311,7 @@ function getSelectedDices(){
   return selected;
 }
 
-function getAllDices(){
+function getBotsDices(){
   let preDices = document.getElementsByClassName('dice');
   let dices = [];
   for(let i = 0; i < preDices.length; i++){
@@ -338,7 +356,7 @@ function sequence(selected) //checks for sequence
   let seq = [1,2,3,4,5,6];
   if(areArraysEqual(selected,seq)) //postupka
   {
-    result = 1500;
+    result = 2000;
     console.log("postupka");
   }
   return result;
@@ -421,7 +439,7 @@ function isAllPairs(arr) { //checks for pairs
         return acc;
     }, {});
 
-    return Object.values(countMap).every(count => count === 2) ? 1000 : 0;
+    return Object.values(countMap).every(count => count === 2) ? 1500 : 0;
 }
 
 let nums = []
@@ -457,6 +475,6 @@ function logPoints(selected) //vraci pocet pointu
 }
 
 function getGoodDices(){
-  logPoints(getAllDices())
-  return subtractArrays(getAllDices(), nums); 
+  logPoints(getBotsDices())
+  return subtractArrays(getBotsDices(), nums); 
 }

@@ -32,6 +32,19 @@ body{
     overflow: hidden;
 }
 
+.slidecontainer {
+  accent-color:#492f16;
+  display:inline-block;
+}
+
+#settings{
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    flex-direction: column;
+    padding-left: 10vw;
+}
+
 #menu{
     width: 100vw;
     height: 100vh;
